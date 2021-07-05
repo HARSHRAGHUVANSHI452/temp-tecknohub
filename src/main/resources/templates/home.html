@@ -13,6 +13,8 @@
 		integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
 
+	<!-- RazorPay Script -->
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<!-- favicon -->
 	<link rel="shortcut icon" type="image/png" th:href="@{/images/favicon.png}" />
@@ -186,7 +188,8 @@
 						placeholder="Tell us more about the field in which you need Counseling"></textarea>
 				</div>
 				<div class="col-12 mt-4">
-					<button class="btn btn-success col-12" id = "payBtn" type="submit">Pay</button>
+					<button class="btn btn-success col-12" id="payBtn"
+						type="submit">Pay</button>
 				</div>
 			</form>
 		</div>
@@ -277,6 +280,49 @@
 				$("#PhoneNumber").removeClass("is-valid");
 			}
 		})
+
+		console.log("paymentStarted")
+		var options = {
+			"key": "YOUR_KEY_ID",
+			"amount": "50000",
+			"currency": "INR",
+			"name": "Techno-Hub Pvt. Limited",
+			"description": "",
+			"image": "https://techno-hub.org/wp-content/uploads/2021/05/cropped-technohub-1.png",
+			"order_id": "order_9A33XWu170gUtm",
+			"handler": function (response) {
+				alert(response.razorpay_payment_id);
+				alert(response.razorpay_order_id);
+				alert(response.razorpay_signature)
+			},
+			"prefill": {
+				"name": "",
+				"email": "",
+				"contact": ""
+			},
+			"notes": {
+				"address": "Techno-Hub Corporate Office"
+
+			},
+			"theme": {
+				"color": "#3399cc"
+			}
+		};
+		var rzp = new Razorpay(options);
+		rzp.on('payment.failed', function (response) {
+			alert(response.error.code);
+			alert(response.error.description);
+			alert(response.error.source);
+			alert(response.error.step);
+			alert(response.error.reason);
+			alert(response.error.metadata.order_id);
+			alert(response.error.metadata.payment_id);
+		});
+
+		document.getElementById('payBtn').onclick = function (e) {
+			e.preventDefault();
+			rzp.open();
+		}
 	</script>
 
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
