@@ -118,8 +118,8 @@
 
 	<div id="Contact" class="py-3">
 		<div class="container">
-			<h1 class="mb-3">Contact Form</h1>
-			<form class="row g-2 text-white">
+			<h1 class="mb-3">Counseling Form</h1>
+			<form class="row g-2 text-white" id="form" action="/save-request" method="POST">
 				<div class="col-md-6">
 					<label for="FirstName" class="form-label">First name</label>
 					<input type="text" class="form-control" id="FirstName" required>
@@ -141,7 +141,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<label for="Email" class="form-label">Email</label>
+					<label for="Email" class="form-label">E-Mail</label>
 					<div class="input-group has-validation">
 						<input type="Email" class="form-control" id="Email" required>
 						<div class="invalid-feedback">
@@ -183,13 +183,12 @@
 					</div>
 				</div>
 				<div class="form-group shadow-textarea">
-					<label for="description">Description</label>
-					<textarea class="form-control z-depth-1" id="description" rows="3"
+					<label for="Description">Description</label>
+					<textarea class="form-control z-depth-1" id="Description" rows="3"
 						placeholder="Tell us more about the field in which you need Counseling"></textarea>
 				</div>
-				<div class="col-12 mt-4">
-					<button class="btn btn-success col-12" id="payBtn"
-						type="submit">Pay</button>
+				<div class="col-12 my-4">
+					<button class="btn btn-primary col-12" onclick="isValid()" type="button">Pay &#8377; 500</button>
 				</div>
 			</form>
 		</div>
@@ -214,20 +213,17 @@
 			if (reg.test($("#FirstName").val())) {
 				$("#FirstName").addClass("is-valid");
 				$("#FirstName").removeClass("is-invalid");
-			}
-			else {
+			} else {
 				$("#FirstName").addClass("is-invalid");
 				$("#FirstName").removeClass("is-valid");
 			}
-
 		});
 		$("#LastName").change(function () {
 			const reg = /^[a-zA-Z\s]+$/;
 			if (reg.test($("#LastName").val())) {
 				$("#LastName").addClass("is-valid");
 				$("#LastName").removeClass("is-invalid");
-			}
-			else {
+			} else {
 				$("#LastName").addClass("is-invalid");
 				$("#LastName").removeClass("is-valid");
 			}
@@ -238,8 +234,7 @@
 			if (reg.test($("#Email").val())) {
 				$("#Email").addClass("is-valid");
 				$("#Email").removeClass("is-invalid");
-			}
-			else {
+			} else {
 				$("#Email").addClass("is-invalid");
 				$("#Email").removeClass("is-valid");
 			}
@@ -250,8 +245,7 @@
 			if (reg.test($("#City").val())) {
 				$("#City").addClass("is-valid");
 				$("#City").removeClass("is-invalid");
-			}
-			else {
+			} else {
 				$("#City").addClass("is-invalid");
 				$("#City").removeClass("is-valid");
 			}
@@ -262,8 +256,7 @@
 			if (reg.test($("#State").val())) {
 				$("#State").addClass("is-valid");
 				$("#State").removeClass("is-invalid");
-			}
-			else {
+			} else {
 				$("#State").addClass("is-invalid");
 				$("#State").removeClass("is-valid");
 			}
@@ -274,55 +267,90 @@
 			if (reg.test($("#PhoneNumber").val())) {
 				$("#PhoneNumber").addClass("is-valid");
 				$("#PhoneNumber").removeClass("is-invalid");
-			}
-			else {
+			} else {
 				$("#PhoneNumber").addClass("is-invalid");
 				$("#PhoneNumber").removeClass("is-valid");
 			}
 		})
 
-		console.log("paymentStarted")
-		var options = {
-			"key": "YOUR_KEY_ID",
-			"amount": "50000",
-			"currency": "INR",
-			"name": "Techno-Hub Pvt. Limited",
-			"description": "",
-			"image": "https://techno-hub.org/wp-content/uploads/2021/05/cropped-technohub-1.png",
-			"order_id": "order_9A33XWu170gUtm",
-			"handler": function (response) {
-				alert(response.razorpay_payment_id);
-				alert(response.razorpay_order_id);
-				alert(response.razorpay_signature)
-			},
-			"prefill": {
-				"name": "",
-				"email": "",
-				"contact": ""
-			},
-			"notes": {
-				"address": "Techno-Hub Corporate Office"
+		function isValid() {
+			var required = $('input').filter('[required]');
 
-			},
-			"theme": {
-				"color": "#3399cc"
+			var allRequired = true;
+			
+			required.each(function () {
+				if ($(this).val() == '') {
+					allRequired = false;
+				}
+			});
+			
+			if(!allRequired) {
+				alert("Please fill the form first");
+				return;
 			}
-		};
-		var rzp = new Razorpay(options);
-		rzp.on('payment.failed', function (response) {
-			alert(response.error.code);
-			alert(response.error.description);
-			alert(response.error.source);
-			alert(response.error.step);
-			alert(response.error.reason);
-			alert(response.error.metadata.order_id);
-			alert(response.error.metadata.payment_id);
-		});
-
-		document.getElementById('payBtn').onclick = function (e) {
-			e.preventDefault();
-			rzp.open();
+			
+			startPayment();
 		}
+
+		const startPayment = () => {
+			console.log("paymentStarted")
+
+			$.ajax(
+				{
+					url: "/create-order",
+					data: JSON.stringify({amount: 50000}),
+					contentType: 'application/json',
+					type: 'POST',
+					dataType: 'json',
+					success: function (response) {
+						console.log(response);
+						if (response.status == "created") {
+							let options = {
+								"key": "rzp_test_fS3k81U9Notfcz",
+								"amount": "50000",
+								"currency": "INR",
+								"name": "Techno-Hub Pvt. Limited",
+								"description": "Counseling Fee",
+								"image": "https://techno-hub.org/wp-content/uploads/2021/05/cropped-technohub-1.png",
+								"order_id": response.id,
+								"handler": function (response) {
+									console.log(response.razorpay_payment_id);
+									console.log(response.razorpay_order_id);
+									console.log(response.razorpay_signature);
+									alert("payment Successful")
+									$("#form").submit();
+								},
+								"prefill": {
+									"name": "",
+									"email": "",
+									"contact": ""
+								},
+								"notes": {
+									"address": "Techno-Hub Corporate Office"
+								},
+								"theme": {
+									"color": "#3399cc"
+								}
+							}//end of options
+							var rzp = new Razorpay(options);
+							rzp.on('payment.failed', function (response) {
+								alert(response.error.code);
+								alert(response.error.description);
+								alert(response.error.source);
+								alert(response.error.step);
+								alert(response.error.reason);
+								alert(response.error.metadata.order_id);
+								alert(response.error.metadata.payment_id);
+							});
+							rzp.open();
+						}//end of if
+					},//end of success function
+					error: function (error) {
+						console.log(error);
+					}
+				}//end of ajax
+			)
+		}//end of start payment
 	</script>
 
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
