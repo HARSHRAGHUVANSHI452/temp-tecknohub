@@ -4,8 +4,6 @@ import java.util.Map;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,11 +54,18 @@ public class WebController {
 		System.out.println(data);
 		Request request = new Request(data.get("FirstName"), data.get("LastName"), data.get("Email"), data.get("City"),
 				data.get("State"), data.get("PhoneNumber"), data.get("Description"));
-		System.out.println(request);
+
 		requestRepository.save(request);
 		
-		service.simplemail("harshraghuvanshi452@gmail.com", request.toString(), "subject");
-		
-		return "home";
+		String message = "Name : " + request.getFirstName() + " " + request.getLastName() + "\n" + "E-Mail : "
+				+ request.getEmail() + "\n" + "Mobile Number : " + request.getPhoneNumber() + "\n" + "Description : "
+				+ request.getDescription();
+
+		String msgForClient = "Hello " + request.getFirstName()
+				+ ",\n \t Congratulations on Registering. We will contact you within 6 hours of working time.\n\n Warm Regards\nTechno-Hub Team";
+
+		service.simplemail("negikingston@gmail.com", message, "Counseling Request");
+		service.simplemail(request.getEmail(), msgForClient, "Registration Succesful");
+		return "redirect:/";
 	}
 }

@@ -16,6 +16,7 @@
 	<!-- RazorPay Script -->
 	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<!-- favicon -->
 	<link rel="shortcut icon" type="image/png" th:href="@{/images/favicon.png}" />
 
@@ -82,10 +83,7 @@
 						<a class="nav-link active" aria-current="page" href="#carouselExampleControls">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#">About Us</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#Contact">Contact Us</a>
+						<a class="nav-link" href="#Contact">Counseling</a>
 					</li>
 				</ul>
 			</div>
@@ -188,7 +186,7 @@
 						placeholder="Tell us more about the field in which you need Counseling"></textarea>
 				</div>
 				<div class="col-12 my-4">
-					<button type="button" class="btn btn-primary col-12" onclick="isValid()" >Pay &#8377; 500</button>
+					<button type="button" class="btn btn-primary col-12" onclick="isValid()">Pay &#8377; 500</button>
 				</div>
 			</form>
 		</div>
@@ -277,18 +275,18 @@
 			var required = $('input').filter('[required]');
 
 			var allRequired = true;
-			
+
 			required.each(function () {
 				if ($(this).val() == '') {
 					allRequired = false;
 				}
 			});
-			
-			if(!allRequired) {
+
+			if (!allRequired) {
 				alert("Please fill the form first");
 				return;
 			}
-			
+
 			startPayment();
 		}
 
@@ -303,7 +301,6 @@
 					type: 'POST',
 					dataType: 'json',
 					success: function (response) {
-						console.log(response);
 						if (response.status == "created") {
 							let options = {
 								"key": "rzp_test_fS3k81U9Notfcz",
@@ -314,10 +311,7 @@
 								"image": "https://techno-hub.org/wp-content/uploads/2021/05/cropped-technohub-1.png",
 								"order_id": response.id,
 								"handler": function (response) {
-									console.log(response.razorpay_payment_id);
-									console.log(response.razorpay_order_id);
-									console.log(response.razorpay_signature);
-									alert("payment Successful")
+									swal("Good job!", "Payment successful", "success");
 									$("#form").submit();
 								},
 								"prefill": {
@@ -334,19 +328,13 @@
 							}//end of options
 							var rzp = new Razorpay(options);
 							rzp.on('payment.failed', function (response) {
-								alert(response.error.code);
-								alert(response.error.description);
-								alert(response.error.source);
-								alert(response.error.step);
-								alert(response.error.reason);
-								alert(response.error.metadata.order_id);
-								alert(response.error.metadata.payment_id);
+								swal("Failed!", "Payment failed", "error");
 							});
 							rzp.open();
 						}//end of if
 					},//end of success function
 					error: function (error) {
-						console.log(error);
+						swal("Error!", "Server Error", "error");
 					}
 				}//end of ajax
 			)
@@ -359,7 +347,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
 		integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
 		crossorigin="anonymous"></script>
-
 
 </body>
 
