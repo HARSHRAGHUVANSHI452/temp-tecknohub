@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
+import com.temptecknohub.mailservice.mailservice;
 import com.temptecknohub.model.Request;
 import com.temptecknohub.repository.RequestRepository;
 
@@ -22,6 +25,9 @@ public class WebController {
 
 	@Autowired
 	RequestRepository requestRepository;
+	
+	@Autowired
+	private mailservice service;
 
 	@GetMapping("/")
 	public String home() {
@@ -52,6 +58,9 @@ public class WebController {
 				data.get("State"), data.get("PhoneNumber"), data.get("Description"));
 		System.out.println(request);
 		requestRepository.save(request);
+		
+		service.simplemail("harshraghuvanshi452@gmail.com", request.toString(), "subject");
+		
 		return "home";
 	}
 }
