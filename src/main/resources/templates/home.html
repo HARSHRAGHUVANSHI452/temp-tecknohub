@@ -66,7 +66,7 @@
 		}
 
 		.red-star {
-			color: red;
+			color: rgb(253 23 23 / 83%)
 		}
 	</style>
 </head>
@@ -232,7 +232,7 @@
 		});
 		$("#Email").change(function () {
 			const reg = /^([a-zA-Z0-9]+)@([a-zA-Z]+)\.([a-zA-Z]+)$/;
-			console.log($("#Email").val());
+			//console.log($("#Email").val());
 			if (reg.test($("#Email").val())) {
 				$("#Email").addClass("is-valid");
 				$("#Email").removeClass("is-invalid");
@@ -243,7 +243,7 @@
 		});
 		$("#City").change(() => {
 			const reg = /^[a-zA-Z\s]+$/;
-			console.log($("#Email").val());
+			//console.log($("#Email").val());
 			if (reg.test($("#City").val())) {
 				$("#City").addClass("is-valid");
 				$("#City").removeClass("is-invalid");
@@ -254,7 +254,7 @@
 		})
 		$("#State").change(() => {
 			const reg = /^[a-zA-Z\s]+$/;
-			console.log($("#State").val());
+			//console.log($("#State").val());
 			if (reg.test($("#State").val())) {
 				$("#State").addClass("is-valid");
 				$("#State").removeClass("is-invalid");
@@ -265,7 +265,7 @@
 		});
 		$("#PhoneNumber").change(() => {
 			const reg = /^[0-9]{10}/;
-			console.log($("#PhoneNumber").val());
+			//console.log($("#PhoneNumber").val());
 			if (reg.test($("#PhoneNumber").val())) {
 				$("#PhoneNumber").addClass("is-valid");
 				$("#PhoneNumber").removeClass("is-invalid");
@@ -295,7 +295,7 @@
 		}
 
 		const startPayment = () => {
-			console.log("paymentStarted")
+			//console.log("paymentStarted")
 
 			$.ajax(
 				{

@@ -2,7 +2,7 @@ package com.temptecknohub.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "requests")
+@Document(collection = "Requests")
 public class Request {
 	private String FirstName;
 	private String LastName;
