@@ -57,14 +57,14 @@ public class WebController {
 
 		requestRepository.save(request);
 		
-		String message = "Name : " + request.getFirstName() + " " + request.getLastName() + "\n" + "E-Mail : "
+		String msgForAdmin = "Name : " + request.getFirstName() + " " + request.getLastName() + "\n" + "E-Mail : "
 				+ request.getEmail() + "\n" + "Mobile Number : " + request.getPhoneNumber() + "\n" + "Description : "
 				+ request.getDescription();
 
 		String msgForClient = "Hello " + request.getFirstName()
 				+ ",\n \t Congratulations on Registering. We will contact you at the earliest.\n\n Warm Regards\nTechno-Hub Team";
 
-		service.simplemail("negikingston@gmail.com", message, "Counseling Request");
+		service.simplemail("negikingston@gmail.com", msgForAdmin, "Counseling Request");
 		service.simplemail(request.getEmail(), msgForClient, "Registration Succesful");
 		return "redirect:/";
 	}
