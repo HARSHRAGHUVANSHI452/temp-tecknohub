@@ -37,7 +37,7 @@ public class WebController {
 	public String createOrder(@RequestBody Map<String, Object> data) throws RazorpayException {
 		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_fS3k81U9Notfcz", "OsoJQTEFAseTv5hDJ67eNoYn");
 
-		System.out.println("Inside Create Order");
+//		System.out.println("Inside Create Order");
 
 		JSONObject options = new JSONObject();
 		options.put("amount", 50000);
@@ -51,7 +51,7 @@ public class WebController {
 
 	@PostMapping("/save-request")
 	public String saveRequest(@RequestParam Map<String, String> data) {
-		System.out.println(data);
+//		System.out.println(data);
 		Request request = new Request(data.get("FirstName"), data.get("LastName"), data.get("Email"), data.get("City"),
 				data.get("State"), data.get("PhoneNumber"), data.get("Description"));
 
