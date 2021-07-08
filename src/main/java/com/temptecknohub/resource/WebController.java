@@ -62,7 +62,7 @@ public class WebController {
 				+ request.getDescription();
 
 		String msgForClient = "Hello " + request.getFirstName()
-				+ ",\n \t Congratulations on Registering. We will contact you within 6 hours of working time.\n\n Warm Regards\nTechno-Hub Team";
+				+ ",\n \t Congratulations on Registering. We will contact you at the earliest.\n\n Warm Regards\nTechno-Hub Team";
 
 		service.simplemail("negikingston@gmail.com", message, "Counseling Request");
 		service.simplemail(request.getEmail(), msgForClient, "Registration Succesful");
