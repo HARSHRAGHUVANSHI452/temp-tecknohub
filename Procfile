@@ -1,1 +1,0 @@
-worker: java -jar target/temp-tecknohub-0.0.1-SNAPSHOT.jar
